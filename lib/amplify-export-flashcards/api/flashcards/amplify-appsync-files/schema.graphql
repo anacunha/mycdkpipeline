@@ -1,0 +1,295 @@
+
+type Card @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  front: String!
+  back: String!
+  deckId: ID!
+  owner: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Deck @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  name: String!
+  cards(filter: ModelCardFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCardConnection
+  owner: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelCardConnection @aws_iam @aws_cognito_user_pools {
+  items: [Card]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelCardFilterInput {
+  id: ModelIDInput
+  front: ModelStringInput
+  back: ModelStringInput
+  deckId: ModelIDInput
+  owner: ModelStringInput
+  and: [ModelCardFilterInput]
+  or: [ModelCardFilterInput]
+  not: ModelCardFilterInput
+}
+
+type Query {
+  getCard(id: ID!): Card @aws_iam @aws_cognito_user_pools
+  listCards(filter: ModelCardFilterInput, limit: Int, nextToken: String): ModelCardConnection @aws_iam @aws_cognito_user_pools
+  syncCards(filter: ModelCardFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelCardConnection @aws_iam @aws_cognito_user_pools
+  getDeck(id: ID!): Deck @aws_iam @aws_cognito_user_pools
+  listDecks(filter: ModelDeckFilterInput, limit: Int, nextToken: String): ModelDeckConnection @aws_iam @aws_cognito_user_pools
+  syncDecks(filter: ModelDeckFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelDeckConnection @aws_iam @aws_cognito_user_pools
+}
+
+input ModelCardConditionInput {
+  front: ModelStringInput
+  back: ModelStringInput
+  deckId: ModelIDInput
+  owner: ModelStringInput
+  and: [ModelCardConditionInput]
+  or: [ModelCardConditionInput]
+  not: ModelCardConditionInput
+}
+
+input CreateCardInput {
+  id: ID
+  front: String!
+  back: String!
+  deckId: ID!
+  owner: String
+  _version: Int
+}
+
+input UpdateCardInput {
+  id: ID!
+  front: String
+  back: String
+  deckId: ID
+  owner: String
+  _version: Int
+}
+
+input DeleteCardInput {
+  id: ID!
+  _version: Int
+}
+
+type Mutation {
+  createCard(input: CreateCardInput!, condition: ModelCardConditionInput): Card @aws_iam @aws_cognito_user_pools
+  updateCard(input: UpdateCardInput!, condition: ModelCardConditionInput): Card @aws_iam @aws_cognito_user_pools
+  deleteCard(input: DeleteCardInput!, condition: ModelCardConditionInput): Card @aws_iam @aws_cognito_user_pools
+  createDeck(input: CreateDeckInput!, condition: ModelDeckConditionInput): Deck @aws_iam @aws_cognito_user_pools
+  updateDeck(input: UpdateDeckInput!, condition: ModelDeckConditionInput): Deck @aws_iam @aws_cognito_user_pools
+  deleteDeck(input: DeleteDeckInput!, condition: ModelDeckConditionInput): Deck @aws_iam @aws_cognito_user_pools
+}
+
+type Subscription {
+  onCreateCard(owner: String): Card @aws_subscribe(mutations: ["createCard"]) @aws_iam @aws_cognito_user_pools
+  onUpdateCard(owner: String): Card @aws_subscribe(mutations: ["updateCard"]) @aws_iam @aws_cognito_user_pools
+  onDeleteCard(owner: String): Card @aws_subscribe(mutations: ["deleteCard"]) @aws_iam @aws_cognito_user_pools
+  onCreateDeck(owner: String): Deck @aws_subscribe(mutations: ["createDeck"]) @aws_iam @aws_cognito_user_pools
+  onUpdateDeck(owner: String): Deck @aws_subscribe(mutations: ["updateDeck"]) @aws_iam @aws_cognito_user_pools
+  onDeleteDeck(owner: String): Deck @aws_subscribe(mutations: ["deleteDeck"]) @aws_iam @aws_cognito_user_pools
+}
+
+type ModelDeckConnection @aws_iam @aws_cognito_user_pools {
+  items: [Deck]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelDeckFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  owner: ModelStringInput
+  and: [ModelDeckFilterInput]
+  or: [ModelDeckFilterInput]
+  not: ModelDeckFilterInput
+}
+
+input ModelDeckConditionInput {
+  name: ModelStringInput
+  owner: ModelStringInput
+  and: [ModelDeckConditionInput]
+  or: [ModelDeckConditionInput]
+  not: ModelDeckConditionInput
+}
+
+input CreateDeckInput {
+  id: ID
+  name: String!
+  owner: String
+  _version: Int
+}
+
+input UpdateDeckInput {
+  id: ID!
+  name: String
+  owner: String
+  _version: Int
+}
+
+input DeleteDeckInput {
+  id: ID!
+  _version: Int
+}
+

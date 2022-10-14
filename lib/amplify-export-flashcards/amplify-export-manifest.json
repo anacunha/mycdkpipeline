@@ -1,0 +1,112 @@
+{
+  "stackName": "amplify-flashcards-dev-91059",
+  "props": {
+    "templateFile": "root-stack-template.json",
+    "parameters": {
+      "AuthRoleName": "amplify-flashcards-dev-91059-authRole",
+      "UnauthRoleName": "amplify-flashcards-dev-91059-unauthRole",
+      "DeploymentBucketName": "amplify-flashcards-dev-91059-deployment"
+    },
+    "preserveLogicalIds": true,
+    "loadNestedStacks": {
+      "apiflashcards": {
+        "templateFile": "api/flashcards/cloudformation-template.json",
+        "parameters": {
+          "AppSyncApiName": "flashcards",
+          "DynamoDBBillingMode": "PAY_PER_REQUEST",
+          "DynamoDBEnableServerSideEncryption": false,
+          "S3DeploymentBucket": "amplify-flashcards-dev-91059-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/6a098900b3677e6d7257d791f1d3494c1bb2fa25",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {
+          "Card": {
+            "templateFile": "api/flashcards/amplify-appsync-files/stacks/Card.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "ConnectionStack": {
+            "templateFile": "api/flashcards/amplify-appsync-files/stacks/ConnectionStack.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "CustomResourcesjson": {
+            "templateFile": "api/flashcards/amplify-appsync-files/stacks/CustomResources.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Deck": {
+            "templateFile": "api/flashcards/amplify-appsync-files/stacks/Deck.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          }
+        }
+      },
+      "authflashcardsb4c37c28": {
+        "templateFile": "auth/flashcardsb4c37c28/flashcardsb4c37c28-cloudformation-template.json",
+        "parameters": {
+          "identityPoolName": "flashcardsb4c37c28_identitypool_b4c37c28",
+          "allowUnauthenticatedIdentities": false,
+          "resourceNameTruncated": "flashcb4c37c28",
+          "userPoolName": "flashcardsb4c37c28_userpool_b4c37c28",
+          "autoVerifiedAttributes": [
+            "email"
+          ],
+          "mfaConfiguration": "OFF",
+          "mfaTypes": [
+            "SMS Text Message"
+          ],
+          "smsAuthenticationMessage": "Your authentication code is {####}",
+          "smsVerificationMessage": "Your verification code is {####}",
+          "emailVerificationSubject": "Your verification code",
+          "emailVerificationMessage": "Your verification code is {####}",
+          "defaultPasswordPolicy": false,
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [],
+          "requiredAttributes": [
+            "email"
+          ],
+          "aliasAttributes": [],
+          "userpoolClientGenerateSecret": false,
+          "userpoolClientRefreshTokenValidity": 30,
+          "userpoolClientWriteAttributes": [
+            "email"
+          ],
+          "userpoolClientReadAttributes": [
+            "email"
+          ],
+          "userpoolClientLambdaRole": "flashcb4c37c28_userpoolclient_lambda_role",
+          "userpoolClientSetAttributes": false,
+          "sharedId": "b4c37c28",
+          "resourceName": "flashcardsb4c37c28",
+          "authSelections": "identityPoolAndUserPool",
+          "useDefault": "default",
+          "userPoolGroupList": [],
+          "serviceName": "Cognito",
+          "usernameCaseSensitive": false,
+          "useEnabledMfas": true,
+          "breakCircularDependency": true,
+          "dependsOn": [],
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "predictionsspeechGeneratorad58d821": {
+        "templateFile": "predictions/speechGeneratorad58d821/speechGeneratorad58d821-template.json",
+        "parameters": {
+          "resourceName": "speechGeneratorad58d821",
+          "convertPolicyName": "speechGeneratorPolicyad58d821",
+          "convertType": "speechGenerator",
+          "language": "es-MX",
+          "voice": "Mia",
+          "access": "auth",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      }
+    }
+  }
+}

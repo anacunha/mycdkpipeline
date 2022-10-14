@@ -1,0 +1,17 @@
+[
+  {
+    "category": "auth",
+    "resourceName": "flashcardsb4c37c28",
+    "service": "Cognito"
+  },
+  {
+    "category": "api",
+    "resourceName": "flashcards",
+    "service": "AppSync"
+  },
+  {
+    "category": "predictions",
+    "resourceName": "speechGeneratorad58d821",
+    "service": "Polly"
+  }
+]
